@@ -1,4 +1,4 @@
-*! version 0.9.0  19oct2026
+*! version 0.9.1  19oct2026
 *! synthx -- exact synthetic control (Abadie and Shang, Synthetic Control: An Exact Geometric Formulation).
 *! Stata prepares the data and calls the Python solver through stata_backend.py.
 *! Run synthx_checkdeps to check Python and its dependencies; see help synthx for syntax.

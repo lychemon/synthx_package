@@ -2,7 +2,7 @@
 
 Alberto Abadie and Yucheng Shang
 
-Version: **0.9.0**.
+Version: **0.9.1**.
 
 Original code and documentation are licensed under the [MIT License](LICENSE).
 Third-party datasets retain their original terms.

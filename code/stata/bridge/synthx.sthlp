@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.9.0  19oct2026}{...}
+{* *! version 0.9.1  19oct2026}{...}
 {vieweralsosee "synth" "help synth"}{...}
 {viewerjumpto "Syntax" "synthx##syntax"}{...}
 {viewerjumpto "Description" "synthx##description"}{...}
