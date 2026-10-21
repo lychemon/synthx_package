@@ -13,6 +13,8 @@ from .interior_vsearch import admissible, barycentric, theta_diag, cell_factor
 from .interior_cellwalk import seed_cell, flip_neighbor, cell_neighbors
 
 TOL = 1e-9
+SDP_TOL = 1e-6          # solver tolerance for the attainability SDP
+SDP_MARGIN = 1e-4       # an inaccurate solve decides attainability only beyond this slack
 
 
 def Q_matrices(A, X0, luf=None):
@@ -34,7 +36,7 @@ def Q_matrices(A, X0, luf=None):
     return out
 
 
-def theta_pd(A, X0, luf=None, maxit=200, tol=1e-9):
+def theta_pd(A, X0, luf=None, maxit=200, tol=SDP_TOL):
     """
     Maximize the common slack in the PD cell inequalities.
     """
@@ -49,9 +51,12 @@ def theta_pd(A, X0, luf=None, maxit=200, tol=1e-9):
     problem = cp.Problem(cp.Maximize(slack), constraints)
     problem.solve(solver=cp.CLARABEL, max_iter=maxit,
                   tol_gap_abs=tol, tol_gap_rel=tol, tol_feas=tol)
-    if problem.status != cp.OPTIMAL:
-        raise RuntimeError("PD cell SDP failed: " + problem.status)
-    return float(problem.value)
+    value = float(problem.value) if problem.value is not None else float("nan")
+    if problem.status == cp.OPTIMAL and np.isfinite(value):
+        return value
+    if problem.status == cp.OPTIMAL_INACCURATE and np.isfinite(value) and abs(value) > SDP_MARGIN:
+        return value
+    raise RuntimeError("PD cell SDP failed: " + str(problem.status))
 
 
 def pd_attainable(A, X0):
